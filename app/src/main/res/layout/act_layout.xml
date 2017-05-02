@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/actName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter Activity Name" />
+
+    <Button
+        android:id="@+id/showAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Avtivities"
+        android:layout_marginBottom="11dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp" />
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Activity"
+        android:layout_alignBaseline="@+id/showAct"
+        android:layout_alignBottom="@+id/showAct"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp" />
+
+    <DatePicker
+        android:id="@+id/eventDate"
+        android:layout_width="wrap_content"
+        android:layout_height="169dp"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:layout_above="@+id/eventTime"
+        android:layout_alignLeft="@+id/eventTime"
+        android:layout_alignStart="@+id/eventTime"
+        android:layout_marginBottom="10dp" />
+
+    <TimePicker
+        android:id="@+id/eventTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
+        android:layout_above="@+id/showAct"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/dest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/actName"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Destination" />
+
+
+</RelativeLayout>

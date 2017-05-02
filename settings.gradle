@@ -1,0 +1,1 @@
+include ':app', ':easy_ocr_library', ':easy_ocr_library-release'

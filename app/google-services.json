@@ -1,0 +1,215 @@
+{
+  "project_info": {
+    "project_number": "542436860010",
+    "firebase_url": "https://mnemonica-15b7e.firebaseio.com",
+    "project_id": "mnemonica-15b7e",
+    "storage_bucket": "mnemonica-15b7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542436860010:android:1d8f5b40530ef092",
+        "android_client_info": {
+          "package_name": "com.example.handeozyazgan.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542436860010-8c96ju54so7rrg12csg7n4gp1bs0f56g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.handeozyazgan.myapp",
+            "certificate_hash": "b9fe20264ce4224bc78f54d326357dc6204de95d"
+          }
+        },
+        {
+          "client_id": "542436860010-os6j1bbbrqq8ju25qrdf1d97h3hc55i8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.handeozyazgan.myapp",
+            "certificate_hash": "4906b798b702d0d5f49b5ecabbe1f5553f07ba55"
+          }
+        },
+        {
+          "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDycWsj1q6lrqKkYyFr2wKBBe7lppORDZ4"
+        },
+        {
+          "current_key": "AIzaSyABtFRV0oE0nLJMsZlhR1qRyIchamaMmgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542436860010:android:a29c971dfc44c526",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542436860010-r74qo4hpi6e4vlaffd1jifc1sekigp0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mygdx.game",
+            "certificate_hash": "4906b798b702d0d5f49b5ecabbe1f5553f07ba55"
+          }
+        },
+        {
+          "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDycWsj1q6lrqKkYyFr2wKBBe7lppORDZ4"
+        },
+        {
+          "current_key": "AIzaSyABtFRV0oE0nLJMsZlhR1qRyIchamaMmgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542436860010:android:d842af33038fad5c",
+        "android_client_info": {
+          "package_name": "info.androidhive.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542436860010-uus751tilr49lobrl4nmfdavtnrr3b6l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "info.androidhive.firebase",
+            "certificate_hash": "b9fe20264ce4224bc78f54d326357dc6204de95d"
+          }
+        },
+        {
+          "client_id": "542436860010-mu6viakn8ocpe3cin207mpac5i57dusf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "info.androidhive.firebase",
+            "certificate_hash": "4906b798b702d0d5f49b5ecabbe1f5553f07ba55"
+          }
+        },
+        {
+          "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDycWsj1q6lrqKkYyFr2wKBBe7lppORDZ4"
+        },
+        {
+          "current_key": "AIzaSyABtFRV0oE0nLJMsZlhR1qRyIchamaMmgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542436860010:android:9f3581f130f328ef",
+        "android_client_info": {
+          "package_name": "com.example.Mnemonica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542436860010-hb4l9bpldmre6rvjpu1lqitfbevscrpk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.Mnemonica",
+            "certificate_hash": "4906b798b702d0d5f49b5ecabbe1f5553f07ba55"
+          }
+        },
+        {
+          "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDycWsj1q6lrqKkYyFr2wKBBe7lppORDZ4"
+        },
+        {
+          "current_key": "AIzaSyABtFRV0oE0nLJMsZlhR1qRyIchamaMmgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542436860010-46aha0bsrlngh1mfk651nton8nq70lgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

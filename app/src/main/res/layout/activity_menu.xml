@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <Button
+        android:id="@+id/editAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Your Account" />
+
+    <Button
+        android:id="@+id/dataTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test Data" />
+
+    <Button
+        android:id="@+id/addAct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Activity" />
+
+    <Button
+        android:text="show my location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/location" />
+
+    <Button
+        android:text="Find Distance Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/findDistTime" />
+
+    <Button
+        android:text="push notification "
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:id="@+id/pushNotification" />
+
+    <Button
+        android:text="show token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_show_token" />
+    <Button
+        android:id="@+id/addFriend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Friend" />
+
+    <Button
+        android:id="@+id/showFriends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Friends" />
+
+    <Button
+        android:id="@+id/findAdressLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show location of anywhere" />
+
+    <Button
+        android:id="@+id/schedule_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Schedule" />
+
+</LinearLayout>

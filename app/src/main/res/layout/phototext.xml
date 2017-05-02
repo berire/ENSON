@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <Button
+        android:id="@+id/button_take"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TAKE" />
+
+    <Button
+        android:id="@+id/button_gal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Galerry" />
+
+    <ImageView
+        android:id="@+id/image11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.55"
+        app:srcCompat="@drawable/ic_collapse_00011" />
+
+    <EditText
+        android:id="@+id/field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="TRANS HERE" />
+
+</LinearLayout>

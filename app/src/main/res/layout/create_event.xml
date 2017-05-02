@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <EditText
+        android:id="@+id/eventName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Event Name" />
+
+    <EditText
+        android:id="@+id/eventPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Event Place" />
+
+    <DatePicker
+        android:id="@+id/eventDate"
+        android:layout_width="wrap_content"
+        android:layout_height="104dp"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:layout_below="@+id/actName"
+        android:layout_alignLeft="@+id/eventTime"
+        android:layout_alignStart="@+id/eventTime"
+        android:layout_weight="0.19" />
+
+    <TimePicker
+        android:id="@+id/eventTime"
+        android:layout_width="wrap_content"
+        android:layout_height="153dp"
+        android:timePickerMode="spinner"
+        android:layout_below="@+id/eventDate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp" />
+
+    <Button
+        android:id="@+id/addEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Event" />
+
+    <Button
+        android:id="@+id/sendEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Event" />
+
+</LinearLayout>
