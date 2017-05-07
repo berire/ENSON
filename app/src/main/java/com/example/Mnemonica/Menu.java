@@ -215,10 +215,11 @@ public class Menu extends Activity {
                 startActivity(intent);
             }
         });
+
         showFriends.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Menu.this, ShowFriends.class);
+                Intent intent = new Intent(Menu.this, Hotel.class);
                 startActivity(intent);
             }
         });

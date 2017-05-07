@@ -102,13 +102,22 @@ public class SendEvent extends Activity {
         send.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+
                 for (int i = 0; i<fList.size(); i++){
-                    sendNotification(fList.get(i));
+                 Send_Request.Request_Type=2;
+                 Send_Request.toWhom=fList.get(i);
+                    Send_Request.Event_id=eventN;
+                    Intent intent = new Intent(SendEvent.this, Send_Request.class);
+                    startActivity(intent);
+                    //sendNotification(fList.get(i));
                 }
 
             }
         });
     }
+
+
     private void sendNotification(final String mail)
     {
         AsyncTask.execute(new Runnable() {

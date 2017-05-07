@@ -1,7 +1,10 @@
 package com.example.Mnemonica;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 
 import android.app.Activity;
@@ -27,10 +30,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Bengu on 17.4.2017.
@@ -96,72 +103,32 @@ public class AddFriend extends Activity {
 
             }
         });
-       /* for (int i =0; i<uIDList.size(); i++) {
-            String id = uIDList.get(i);
-            dataRef.child(id).child("Mail").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    value = dataSnapshot.getValue(String.class);
-                    friendsList.add(value);
-                    arrAdap.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }*/
-    /*    dataRef.child(userID).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot child : dataSnapshot.getChildren()){
-                    value = child.getValue(String.class);
-                    key = child.getKey();
-                    //if (key.equals("Mail")){
-                        friendsList.add(key);
-                        arrAdap.notifyDataSetChanged();
-                   // }
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
         friendsView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder adb=new AlertDialog.Builder(AddFriend.this);
-                adb.setTitle("Add Friend?");
-                adb.setMessage("Are you sure you want to add " + i);
-                final int positionToRemove = i;
+                adb.setTitle("Send Friendship Request");
+                adb.setMessage("Are you sure you want to send request" + position);
+                final int positionToRemove = position;
                 adb.setNegativeButton("Cancel", null);
-                adb.setPositiveButton("Add", new AlertDialog.OnClickListener() {
+                adb.setPositiveButton("Send", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        friendNum++;
-                        String fNum = String.valueOf(friendNum);
-                        dataRef.child(userID).child("Friends").child(fNum).setValue(friendsList.get(positionToRemove));
+                        Send_Request.Request_Type=1;
+                        Send_Request.Event_id="q";
+                        Send_Request.toWhom=uIDList.get(positionToRemove);
+                        friendsList.remove(positionToRemove);
+                        Intent intent = new Intent(AddFriend.this, Send_Request.class);
+                        startActivity(intent);
+
                     }});
                 adb.show();
             }
         });
+
+        /*
+        * friendNum++;
+          String fNum = String.valueOf(friendNum);
+              dataRef.child(userID).child("Friends").child(fNum).setValue(friendsList.get(positionToRemove));
+        */
     }
 }

@@ -106,6 +106,28 @@
             android:name=".AlarmManager"
             android:label="AlarmManager"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Chat"
+            android:label="Chat"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Users"
+            android:label="Users"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name=".Hotel"
+            android:label="Hotel"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name=".Send_Request"
+            android:label="Send_Request"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".View_Request"
+            android:label="View_Request"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity
             android:configChanges="orientation|keyboardHidden"

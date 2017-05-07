@@ -5,6 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import android.app.Activity;
@@ -24,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -36,6 +42,7 @@ public class SimpleAndroidOCRActivity extends Activity {
     // You can get them at:
     // https://github.com/tesseract-ocr/tessdata
     public static final String lang = "eng";
+    public String recognizedText;
 
     private static final String TAG = "SimpleAndroidOCR.java";
 
@@ -276,8 +283,8 @@ public class SimpleAndroidOCRActivity extends Activity {
         baseApi.setDebug(true);
         baseApi.init(DATA_PATH, lang);
         baseApi.setImage(bm);
-
-        String recognizedText = baseApi.getUTF8Text();
+        String anothertext=baseApi.getUTF8Text();
+        recognizedText = baseApi.getHOCRText(0);
 
         baseApi.end();
 
@@ -285,18 +292,161 @@ public class SimpleAndroidOCRActivity extends Activity {
         // We will display a stripped out trimmed alpha-numeric version of it (if lang is eng)
         // so that garbage doesn't make it to the display.
 
-        Log.v(TAG, "OCRED TEXT: " + recognizedText);
 
-        if ( lang.equalsIgnoreCase("eng") ) {
-            recognizedText = recognizedText.replaceAll("[^a-zA-Z0-9]+", " ");
+        ArrayList<String> words=new ArrayList<>();
+        Pattern pattern = Pattern.compile("<span class='ocrx_word'(.*?)</span>");
+        Matcher matcher = pattern.matcher(recognizedText);
+        while (matcher.find()) {
+
+            words.add(matcher.group());
+        }
+        ArrayList<String> sizes=new ArrayList<>();
+        ArrayList<String> cntxs=new ArrayList<>();
+        for(int i=0;i<words.size();i++)
+        {
+            Pattern pattern1 = Pattern.compile("title='bbox(.*?);");
+            Matcher matcher1 = pattern1.matcher(words.get(i));
+            while (matcher1.find()) {
+
+                sizes.add(matcher1.group());
+            }
+
+            Pattern pattern2 = Pattern.compile("<strong>(.*?)</strong>");
+            Matcher matcher2 = pattern2.matcher(words.get(i));
+            while (matcher2.find()) {
+
+                cntxs.add(matcher2.group());
+            }
         }
 
-        recognizedText = recognizedText.trim();
+        for(int i=0;i<sizes.size();i++)
+        {
+            String rm=sizes.get(i).replaceAll("title='bbox","");
+            rm=rm.replaceAll(";","");
+            sizes.set(i,rm);
+        }
 
-        if ( recognizedText.length() != 0 ) {
+        for(int i=0;i<cntxs.size();i++)
+        {
+            String rm=cntxs.get(i).replaceAll("</strong>","");
+            rm=rm.replaceAll("<strong>","");
+            cntxs.set(i,rm);
+        }
+
+
+        ArrayList<Word> ALL=new ArrayList<>();
+        for(int i=0;i<words.size();i++)
+        {
+            Word aword=new Word();
+            String[] splited = sizes.get(i).split("\\s+");
+            ArrayList<String> slp=new ArrayList<>();
+            int cv=0;
+            while(cv<splited.length)
+            {
+                slp.add(splited[cv]);
+                cv++;
+            }
+            for(int g=0;g<slp.size();g++)
+            {
+                if(slp.get(g).length()==0 || slp.get(g).length()==1)
+                {
+                    slp.remove(g);
+                }
+
+            }
+            aword.setStartx(Integer.parseInt(slp.get(0)));
+            aword.setStarty(Integer.parseInt(slp.get(1)));
+            aword.setEndx(Integer.parseInt(slp.get(2)));
+            aword.setEndy(Integer.parseInt(slp.get(3)));
+            if(i<cntxs.size())
+                aword.setcontext(cntxs.get(i));
+            ALL.add(aword);
+        }
+
+        //KELIMELERI DUZELTME
+
+       for(int i=0;i<ALL.size();i++)
+        {
+            if(ALL.get(i).getcontext()!=null && ALL.get(i)!=null )
+            {
+                if ( lang.equalsIgnoreCase("eng") ) {
+
+                    String str=ALL.get(i).getcontext().replaceAll("[^a-zA-Z0-9]+", " ");
+
+                    if(str!=null)
+                        ALL.get(i).setcontext(str);
+                }
+
+                ALL.get(i).setcontext(ALL.get(i).getcontext().trim());
+            }
+        }
+
+
+
+        ArrayList<String> Lectures=new ArrayList<>();
+
+        String [] code={"CS","ENG","GE","MATH","MBG","TURK","HIST","HUM","PHYS","EEE","IE","FRE"};
+
+        int cnt=0;
+        for(int i=0,g=0;i<ALL.size()-1&&g<code.length;i++)
+        {
+            if(ALL.get(i).getcontext()!=null)
+                {
+                    if(ALL.get(i).getcontext().equals(code[cnt]) || ALL.get(i).getcontext().equals(code[cnt].toLowerCase()) || ALL.get(i).getcontext().contains(code[cnt]) || ALL.get(i).getcontext().contains(code[cnt].toLowerCase()))
+                    {
+                        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        String aLEC=ALL.get(i).getcontext()+" "+ALL.get(i+1).getcontext();
+                        Lectures.add(aLEC);
+                    }
+                }
+                g++;
+        }
+
+        /*Set<String> hs = new HashSet<>();
+        hs.addAll(Lectures);
+        Lectures.clear();
+        Lectures.addAll(hs);*/
+
+        String ap="EMPTY";
+        for(int g=0;g<ALL.size();g++)
+        {
+
+            if(Lectures.get(g)!=null)
+            {
+                ap=ap+ "A LECTURE: " + Lectures.get(g)+" ";
+            }
+        }
+
+
+        Toast.makeText(SimpleAndroidOCRActivity.this, ap,
+                Toast.LENGTH_SHORT).show();
+
+        _field.setText(ap);
+
+
+
+
+        // CS,ENG,GE,MATH,MBG,TURK,HIST,HUM,PHYS,EEE,IE,FRE
+
+
+
+        // 13 485 29 497   startx, starty, endx, endy
+        //<span class='ocrx_word' id='word_1_114' title='bbox 13 485 29 497; x_wconf 95'><strong>16</strong></span>
+        // Log.v(TAG, "OCRED TEXT: " + recognizedText);
+
+
+
+
+
+        /*if ( recognizedText.length() != 0 ) {
             _field.setText(_field.getText().toString().length() == 0 ? recognizedText : _field.getText() + " " + recognizedText);
             _field.setSelection(_field.getText().toString().length());
-        }
+        }*/
+
+
+
+
+
 
     }
 

@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [onesignal_app_id: "3e0e8f7c-360d-4966-81a8-f225735cf025",
                                 // Project number pulled from dashboard, local value is ignored.
@@ -62,6 +63,9 @@ dependencies {
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.rmtheis:tess-two:6.3.0'
+    compile 'com.android.volley:volley:1.0.0'
     compile project(':easy_ocr_library-release')
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 apply plugin: 'com.google.gms.google-services'
