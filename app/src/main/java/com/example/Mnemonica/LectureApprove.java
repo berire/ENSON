@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.Math.toIntExact;
+
 /**
  * Created by user on 8.5.2017.
  */
@@ -74,15 +76,19 @@ public class LectureApprove extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Long dmb=(Long)dataSnapshot.child("Number of Activities").getValue();
-
-                if(dmb!=0|| dmb!=null)
+                if(dataSnapshot.child("Number of Activities").getValue()!=null)
                 {
-                    String x=dmb.toString();
-                    numberOfActivity=Integer.parseInt(x);
+                long dmb=0;
+                dmb=(long)dataSnapshot.child("Number of Activities").getValue();
+                    if(dmb!=0)
+                    {
+                        numberOfActivity=(int)dmb;
+                    }
+                    else
+                    {numberOfActivity=0;}
                 }
-                else
-                {numberOfActivity=0;}
+
+
             }
 
             @Override
@@ -138,15 +144,16 @@ public class LectureApprove extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String lesName="";
-                int hour1=0;
-                int minute1=0;
-                String day1="";
-                String monthStr1="";
-                String yearStr1="";
-                String destination1="";
+
                 for(int i=0;i<verfy.size();i++)
                 {
+                    String lesName="";
+                    int hour1=0;
+                    int minute1=0;
+                    String day1="";
+                    String monthStr1="";
+                    String yearStr1="";
+                    String destination1="";
                     if(verfy.get(i)==true)
                     {
                         lesName=lectures.get(i).getcontext();
@@ -156,43 +163,45 @@ public class LectureApprove extends AppCompatActivity {
                         monthStr1="EVERY";
                         yearStr1="EVERY";
                         destination1="Bilkent Universitesi";
+
+                        String actN = lesName;
+                        int hour = hour1;
+                        int minute = minute1;
+                        String dayStr = day1;
+                        String monthStr = monthStr1;
+                        String yearStr = yearStr1;
+                        String destination =destination1;
+
+
+                        if (TextUtils.isEmpty(actN)) {
+                            Toast.makeText(getApplicationContext(), "Enter Title of Activity!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        //Adding name of activity to database
+                        String hourStr = String.valueOf(hour);
+                        String minuteStr = String.valueOf(minute);
+                        //myRef.child("Users").child(uid).child("activities").child(activityID).child("Activity Name").setValue(eventName);
+                        DatabaseReference newRef =  myRef.child("Users").child(uid).child("activities").push();
+                        newRef.child("Activity Name").setValue(actN);
+                        newRef.child("Activity Hour").setValue(hourStr);
+                        newRef.child("Activity Minute").setValue(minuteStr);
+                        newRef.child("Activity Day").setValue(dayStr);
+                        newRef.child("Activity Month").setValue(monthStr);
+                        newRef.child("Activity Year").setValue(yearStr);
+                        newRef.child("Activity Destination").setValue(destination);
+                        numberOfActivity++;
+                        //numOfAct = String.valueOf(numberOfActivity);
+                        myRef.child("Users").child(uid).child("Number of Activities").setValue(numberOfActivity);
+                        //Adding location information of activity to database
+
+                        Toast.makeText(getApplicationContext(), "Classess Added!", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LectureApprove.this,Menu.class);
+                        startActivity(intent);
                     }
                 }
 
-                String actN = lesName;
-                int hour = hour1;
-                int minute = minute1;
-                String dayStr = day1;
-                String monthStr = monthStr1;
-                String yearStr = yearStr1;
-                String destination =destination1;
 
-
-                if (TextUtils.isEmpty(actN)) {
-                    Toast.makeText(getApplicationContext(), "Enter Title of Activity!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //Adding name of activity to database
-                String hourStr = String.valueOf(hour);
-                String minuteStr = String.valueOf(minute);
-                //myRef.child("Users").child(uid).child("activities").child(activityID).child("Activity Name").setValue(eventName);
-                DatabaseReference newRef =  myRef.child("Users").child(uid).child("activities").push();
-                newRef.child("Activity Name").setValue(actN);
-                newRef.child("Activity Hour").setValue(hourStr);
-                newRef.child("Activity Minute").setValue(minuteStr);
-                newRef.child("Activity Day").setValue(dayStr);
-                newRef.child("Activity Month").setValue(monthStr);
-                newRef.child("Activity Year").setValue(yearStr);
-                newRef.child("Activity Destination").setValue(destination);
-                numberOfActivity++;
-                //numOfAct = String.valueOf(numberOfActivity);
-                myRef.child("Users").child(uid).child("Number of Activities").setValue(numberOfActivity);
-                //Adding location information of activity to database
-
-                Toast.makeText(getApplicationContext(), "Classess Added!", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(LectureApprove.this,Menu.class);
-                startActivity(intent);
 
 
 
