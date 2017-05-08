@@ -100,20 +100,20 @@ public class CreateAct extends AppCompatActivity {
         });
 
 
-        showAct.setOnClickListener(new View.OnClickListener() {
+       /* showAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CreateAct.this,ActList.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
     }
 
     private void init(){
         add = (Button) findViewById(R.id.add);
-        showAct = (Button) findViewById(R.id.showAct);
+        //showAct = (Button) findViewById(R.id.showAct);
         actName = (EditText) findViewById(R.id.actName);
         dp = (DatePicker)findViewById(R.id.eventDate);
         tp = (TimePicker)findViewById(R.id.eventTime);

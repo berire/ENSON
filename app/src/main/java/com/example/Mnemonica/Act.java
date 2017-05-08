@@ -29,6 +29,9 @@ public class Act {
     private int year;
     private String key;
     private String destination;
+    private  int absance;
+    private int attendanceLimit;
+
 
     public String getDestination() {
         return destination;
@@ -60,6 +63,11 @@ public class Act {
 
     public int getYear() {
         return year;
+    }
+    public int getAttendanceLimit() {return attendanceLimit;}
+
+    public int getAbsance() {
+        return absance;
     }
 
     public void setHour(int hour) {
@@ -93,6 +101,20 @@ public class Act {
     public void setKey(String key) {
         this.key = key;
     }
+
+    public void setAbsance(int absance) {
+        this.absance = absance;
+    }
+
+    public void setAttendanceLimit(int attendanceLimit) {
+        this.attendanceLimit = attendanceLimit;
+    }
+
+
+
+
+
+
 
     public static Comparator<Act> ActHourComp = new Comparator<Act>() {
 

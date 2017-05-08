@@ -5,8 +5,8 @@ package com.example.Mnemonica;
  */
 
 public class Word {
-    private int startx, starty, endx, endy;
-    private String context;
+    private int startx, starty, endx, endy,hour;
+    private String context,day;
     public Word()
     {}
     public Word(int startx, int starty, int endx, int endy,String context)
@@ -18,6 +18,25 @@ public class Word {
         this.context=context;
 
     }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String context) {
+        this.day = context;
+    }
+
+
+    public int gethour() {
+        return hour;
+    }
+
+    public void sethour(int context) {
+        this.hour = context;
+    }
+
+
 
     public String getcontext() {
         return context;

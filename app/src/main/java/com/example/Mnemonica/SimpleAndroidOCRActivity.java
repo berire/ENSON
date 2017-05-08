@@ -1,4 +1,5 @@
 package com.example.Mnemonica;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +19,14 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +40,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+
+import static java.lang.Math.abs;
 
 public class SimpleAndroidOCRActivity extends Activity {
     public static final String PACKAGE_NAME = "com.datumdroid.android.ocr.simple";
@@ -57,6 +67,7 @@ public class SimpleAndroidOCRActivity extends Activity {
     Bitmap bitmap;
     Bitmap bitmapA;
     protected static final String PHOTO_TAKEN = "photo_taken";
+    public ArrayList<Word> lectures=new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,10 +230,71 @@ public class SimpleAndroidOCRActivity extends Activity {
     protected void onPhotoTaken() {
         _taken = true;
 
+        String ou_path=_path;
+        String ou_path2=_path;
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
+        //options.inSampleSize = 4;
 
-        bitmap = BitmapFactory.decodeFile(_path, options);
+        int dstWidth=1000;
+        int dstHeight=1000;
+        try
+        {
+            int inWidth = 0;
+            int inHeight = 0;
+            InputStream in = new FileInputStream(_path);
+            // decode image size (decode metadata only, not the whole image)
+            BitmapFactory.Options options1 = new BitmapFactory.Options();
+            options1.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, options1);
+            in.close();
+            in = null;
+            // save width and height
+            inWidth = options1.outWidth;
+            inHeight = options1.outHeight;
+            // decode full image pre-resized
+            in = new FileInputStream(_path);
+            Bitmap roughBitmap = BitmapFactory.decodeStream(in);
+            roughBitmap=resize(roughBitmap, inWidth*2, inHeight*2);///YENİİİİİİİİİİİİİİİİİİİİİİİİİİİİİİİİ
+            // calc exact destination size
+            Matrix m = new Matrix();
+            RectF inRect = new RectF(0, 0, roughBitmap.getWidth(), roughBitmap.getHeight());
+            ///////////
+            try
+            {
+                Toast.makeText(SimpleAndroidOCRActivity.this, "BITMAP RESIZED",
+                        Toast.LENGTH_SHORT).show();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                FileOutputStream out = new FileOutputStream(ou_path);
+                roughBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                roughBitmap.compress(Bitmap.CompressFormat.PNG, 80, out);
+                byte[] byteArray = stream.toByteArray();
+
+                ////////////////////////////////////
+                /*PlanarYUVLuminanceSource pl= new PlanarYUVLuminanceSource(byteArray, (int)inWidth, (int)inHeight,(int) inRect.left, (int)inRect.top,
+                        (int)inRect.width(), (int)inRect.height(), false);
+                Bitmap xl=pl.renderCroppedGreyscaleBitmap();
+                bitmap=xl;*/
+
+
+
+
+
+
+
+            }
+            catch (Exception e)
+            {
+                Log.e("Image", e.getMessage(), e);
+                Toast.makeText(SimpleAndroidOCRActivity.this, "here",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (IOException e)
+        {
+            Log.e("Image", e.getMessage(), e);
+        }
+
+        bitmap = BitmapFactory.decodeFile(ou_path, options);
 
         try {
             ExifInterface exif = new ExifInterface(_path);
@@ -285,7 +357,6 @@ public class SimpleAndroidOCRActivity extends Activity {
         baseApi.setImage(bm);
         String anothertext=baseApi.getUTF8Text();
         recognizedText = baseApi.getHOCRText(0);
-
         baseApi.end();
 
         // You now have the text in recognizedText var, you can do anything with it.
@@ -300,6 +371,7 @@ public class SimpleAndroidOCRActivity extends Activity {
 
             words.add(matcher.group());
         }
+
         ArrayList<String> sizes=new ArrayList<>();
         ArrayList<String> cntxs=new ArrayList<>();
         for(int i=0;i<words.size();i++)
@@ -354,10 +426,18 @@ public class SimpleAndroidOCRActivity extends Activity {
                 }
 
             }
-            aword.setStartx(Integer.parseInt(slp.get(0)));
-            aword.setStarty(Integer.parseInt(slp.get(1)));
-            aword.setEndx(Integer.parseInt(slp.get(2)));
-            aword.setEndy(Integer.parseInt(slp.get(3)));
+            if(slp.size()>=4)
+            {
+                aword.setStartx(Integer.parseInt(slp.get(0)));
+                aword.setStarty(Integer.parseInt(slp.get(1)));
+                aword.setEndx(Integer.parseInt(slp.get(2)));
+                aword.setEndy(Integer.parseInt(slp.get(3)));
+            }else if(slp.size()==3){
+                aword.setStartx(Integer.parseInt(slp.get(0)));
+                aword.setStarty(Integer.parseInt(slp.get(1)));
+                aword.setEndx(Integer.parseInt(slp.get(2)));
+                aword.setEndy(-1);
+            }
             if(i<cntxs.size())
                 aword.setcontext(cntxs.get(i));
             ALL.add(aword);
@@ -381,77 +461,461 @@ public class SimpleAndroidOCRActivity extends Activity {
             }
         }
 
-
-
         ArrayList<String> Lectures=new ArrayList<>();
 
         String [] code={"CS","ENG","GE","MATH","MBG","TURK","HIST","HUM","PHYS","EEE","IE","FRE"};
 
         int cnt=0;
-        for(int i=0,g=0;i<ALL.size()-1&&g<code.length;i++)
+        for(int i=0;i<ALL.size()-1;i++)
         {
             if(ALL.get(i).getcontext()!=null)
                 {
-                    if(ALL.get(i).getcontext().equals(code[cnt]) || ALL.get(i).getcontext().equals(code[cnt].toLowerCase()) || ALL.get(i).getcontext().contains(code[cnt]) || ALL.get(i).getcontext().contains(code[cnt].toLowerCase()))
+                    cnt=0;
+                    while(cnt<code.length)
                     {
+                        if(ALL.get(i).getcontext().equals(code[cnt]) || ALL.get(i).getcontext().equals(code[cnt].toLowerCase()) || ALL.get(i).getcontext().contains(code[cnt]) || ALL.get(i).getcontext().contains(code[cnt].toLowerCase()))
+                    {
+                        Word alecture=new Word();
+                        alecture.setStartx(ALL.get(i).getStartx());
+                        alecture.setStarty(ALL.get(i).getStarty());
+                        alecture.setEndx(ALL.get(i+1).getEndx());
+                        alecture.setEndy(ALL.get(i+1).getEndy());
+                        alecture.setcontext(ALL.get(i).getcontext()+ALL.get(i+1).getcontext());
                         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                         String aLEC=ALL.get(i).getcontext()+" "+ALL.get(i+1).getcontext();
                         Lectures.add(aLEC);
+                        lectures.add(alecture);
+
+                    }
+                    cnt++;
                     }
                 }
-                g++;
         }
 
-        /*Set<String> hs = new HashSet<>();
+        Set<String> hs = new HashSet<>();
         hs.addAll(Lectures);
         Lectures.clear();
-        Lectures.addAll(hs);*/
+        Lectures.addAll(hs);
 
-        String ap="EMPTY";
-        for(int g=0;g<ALL.size();g++)
+        String ap="";
+        int smolx=1000000;
+        Word firstX=null;
+
+        for(int g=0;g<lectures.size();g++)
         {
-
-            if(Lectures.get(g)!=null)
+            if(lectures.get(g).getStartx()<smolx)
             {
-                ap=ap+ "A LECTURE: " + Lectures.get(g)+" ";
+                smolx=lectures.get(g).getStartx();
+                firstX=lectures.get(g);
+            }
+        }
+
+        Word firstY=firstX;
+        int w=Math.abs(firstX.getEndx()-firstX.getStartx());
+        int h=Math.abs(firstY.getEndy()-firstY.getStarty());
+
+        for(int x=0;x<lectures.size();x++)
+        {
+            double distX=Math.abs(firstX.getStartx()-lectures.get(x).getStartx());
+            double distY=(150/100)*Math.abs(firstY.getStarty()-lectures.get(x).getStarty());
+
+            if(distX==0*w)
+            {
+                lectures.get(x).setDay("Monday");
+                if(distY==0)
+                {
+                    lectures.get(x).sethour(8);
+                }
+                if(distY>0*h&&distY<=1*h)
+                {
+                    lectures.get(x).sethour(9);
+                }
+                if(distY>1*h&&distY<=2*h)
+                {
+                    lectures.get(x).sethour(10);
+                }
+                if(distY>2*h && distY<=3*h)
+                {
+                    lectures.get(x).sethour(11);
+                }
+                if(distY>3*h&&distY<=4*h)
+                {
+                    lectures.get(x).sethour(12);
+                }
+                if(distY>4*h && distY<=5*h)
+                {
+                    lectures.get(x).sethour(13);
+                }
+                if(distY>5*h&&distY<=6*h)
+                {
+                    lectures.get(x).sethour(14);
+                }
+                if(distY>6*h&&distY<=7*h)
+                {
+                    lectures.get(x).sethour(15);
+                }
+                if(distY>7*h&&distY<=8*h)
+                {
+                    lectures.get(x).sethour(16);
+                }
+                if(distY>8*h)
+                {
+                    lectures.get(x).sethour(17);
+                }
+            }
+
+            if(distX>0*w && distX<=1*w)
+            {
+                lectures.get(x).setDay("Monday");
+                if(distY==0)
+                {
+                    lectures.get(x).sethour(8);
+                }
+                if(distY>0*h&&distY<=1*h)
+                {
+                    lectures.get(x).sethour(9);
+                }
+                if(distY>1*h&&distY<=2*h)
+                {
+                    lectures.get(x).sethour(10);
+                }
+                if(distY>2*h && distY<=3*h)
+                {
+                    lectures.get(x).sethour(11);
+                }
+                if(distY>3*h&&distY<=4*h)
+                {
+                    lectures.get(x).sethour(12);
+                }
+                if(distY>4*h && distY<=5*h)
+                {
+                    lectures.get(x).sethour(13);
+                }
+                if(distY>5*h&&distY<=6*h)
+                {
+                    lectures.get(x).sethour(14);
+                }
+                if(distY>6*h&&distY<=7*h)
+                {
+                    lectures.get(x).sethour(15);
+                }
+                if(distY>7*h&&distY<=8*h)
+                {
+                    lectures.get(x).sethour(16);
+                }
+                if(distY>8*h)
+                {
+                    lectures.get(x).sethour(17);
+                }
+            }
+
+            if(distX>1*w && distX<=2*w)
+            {
+                lectures.get(x).setDay("Tuesday");
+                if(distY==0)
+                {
+                    lectures.get(x).sethour(8);
+                }
+                if(distY>0*h&&distY<=1*h)
+                {
+                    lectures.get(x).sethour(9);
+                }
+                if(distY>1*h&&distY<=2*h)
+                {
+                    lectures.get(x).sethour(10);
+                }
+                if(distY>2*h && distY<=3*h)
+                {
+                    lectures.get(x).sethour(11);
+                }
+                if(distY>3*h&&distY<=4*h)
+                {
+                    lectures.get(x).sethour(12);
+                }
+                if(distY>4*h && distY<=5*h)
+                {
+                    lectures.get(x).sethour(13);
+                }
+                if(distY>5*h&&distY<=6*h)
+                {
+                    lectures.get(x).sethour(14);
+                }
+                if(distY>6*h&&distY<=7*h)
+                {
+                    lectures.get(x).sethour(15);
+                }
+                if(distY>7*h&&distY<=8*h)
+                {
+                    lectures.get(x).sethour(16);
+                }
+                if(distY>8*h)
+                {
+                    lectures.get(x).sethour(17);
+                }
+            }
+
+            if(distX>2*w && distX<=3*w)
+            {
+                lectures.get(x).setDay("Wednesday");
+                if(distY==0)
+                {
+                    lectures.get(x).sethour(8);
+                }
+                if(distY>0*h&&distY<=1*h)
+                {
+                    lectures.get(x).sethour(9);
+                }
+                if(distY>1*h&&distY<=2*h)
+                {
+                    lectures.get(x).sethour(10);
+                }
+                if(distY>2*h && distY<=3*h)
+                {
+                    lectures.get(x).sethour(11);
+                }
+                if(distY>3*h&&distY<=4*h)
+                {
+                    lectures.get(x).sethour(12);
+                }
+                if(distY>4*h && distY<=5*h)
+                {
+                    lectures.get(x).sethour(13);
+                }
+                if(distY>5*h&&distY<=6*h)
+                {
+                    lectures.get(x).sethour(14);
+                }
+                if(distY>6*h&&distY<=7*h)
+                {
+                    lectures.get(x).sethour(15);
+                }
+                if(distY>7*h&&distY<=8*h)
+                {
+                    lectures.get(x).sethour(16);
+                }
+                if(distY>8*h)
+                {
+                    lectures.get(x).sethour(17);
+                }
+            }
+            if(distX>3*w && distX<=4*w)
+            {
+                lectures.get(x).setDay("Thursday");
+                if(distY==0)
+                {
+                    lectures.get(x).sethour(8);
+                }
+                if(distY>0*h&&distY<=1*h)
+                {
+                    lectures.get(x).sethour(9);
+                }
+                if(distY>1*h&&distY<=2*h)
+                {
+                    lectures.get(x).sethour(10);
+                }
+                if(distY>2*h && distY<=3*h)
+                {
+                    lectures.get(x).sethour(11);
+                }
+                if(distY>3*h&&distY<=4*h)
+                {
+                    lectures.get(x).sethour(12);
+                }
+                if(distY>4*h && distY<=5*h)
+                {
+                    lectures.get(x).sethour(13);
+                }
+                if(distY>5*h&&distY<=6*h)
+                {
+                    lectures.get(x).sethour(14);
+                }
+                if(distY>6*h&&distY<=7*h)
+                {
+                    lectures.get(x).sethour(15);
+                }
+                if(distY>7*h&&distY<=8*h)
+                {
+                    lectures.get(x).sethour(16);
+                }
+                if(distY>8*h)
+                {
+                    lectures.get(x).sethour(17);
+                }
+            }
+            if(distX>4*w)
+            {
+                lectures.get(x).setDay("Friday");
+                if(distY==0)
+                {
+                    lectures.get(x).sethour(8);
+                }
+                if(distY>0*h&&distY<=1*h)
+                {
+                    lectures.get(x).sethour(9);
+                }
+                if(distY>1*h&&distY<=2*h)
+                {
+                    lectures.get(x).sethour(10);
+                }
+                if(distY>2*h && distY<=3*h)
+                {
+                    lectures.get(x).sethour(11);
+                }
+                if(distY>3*h&&distY<=4*h)
+                {
+                    lectures.get(x).sethour(12);
+                }
+                if(distY>4*h && distY<=5*h)
+                {
+                    lectures.get(x).sethour(13);
+                }
+                if(distY>5*h&&distY<=6*h)
+                {
+                    lectures.get(x).sethour(14);
+                }
+                if(distY>6*h&&distY<=7*h)
+                {
+                    lectures.get(x).sethour(15);
+                }
+                if(distY>7*h&&distY<=8*h)
+                {
+                    lectures.get(x).sethour(16);
+                }
+                if(distY>8*h)
+                {
+                    lectures.get(x).sethour(17);
+                }
             }
         }
 
 
-        Toast.makeText(SimpleAndroidOCRActivity.this, ap,
+        for(int i=0;i<lectures.size();i++)
+        {
+            if(lectures.get(i)!=null)
+            {
+                ap=ap+ "A LECTURE: " + lectures.get(i).getcontext()+" Hour: "+ lectures.get(i).gethour()+ " Day: "+lectures.get(i).getDay();
+            }
+        }
+
+        Toast.makeText(SimpleAndroidOCRActivity.this, "Word firstX: " +firstX.getcontext()+
+                        "Word firstY: "+firstY.getcontext(),
                 Toast.LENGTH_SHORT).show();
 
         _field.setText(ap);
 
+        LectureApprove.lectures=lectures;
 
-
+        Intent intent = new Intent(SimpleAndroidOCRActivity.this,LectureApprove.class);
+        startActivity(intent);
 
         // CS,ENG,GE,MATH,MBG,TURK,HIST,HUM,PHYS,EEE,IE,FRE
-
-
-
         // 13 485 29 497   startx, starty, endx, endy
         //<span class='ocrx_word' id='word_1_114' title='bbox 13 485 29 497; x_wconf 95'><strong>16</strong></span>
         // Log.v(TAG, "OCRED TEXT: " + recognizedText);
-
-
-
-
-
         /*if ( recognizedText.length() != 0 ) {
             _field.setText(_field.getText().toString().length() == 0 ? recognizedText : _field.getText() + " " + recognizedText);
             _field.setSelection(_field.getText().toString().length());
         }*/
 
+    }
 
+    public Bitmap toGrayscale(Bitmap bmpOriginal)
+    {
+        int width, height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();
 
-
-
-
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        return bmpGrayscale;
     }
 
 
+    public Bitmap resize(Bitmap img, int newWidth, int newHeight) {
+        Bitmap bmap = img.copy(img.getConfig(), true);
 
+        double nWidthFactor = (double) img.getWidth() / (double) newWidth;
+        double nHeightFactor = (double) img.getHeight() / (double) newHeight;
+
+        double fx, fy, nx, ny;
+        int cx, cy, fr_x, fr_y;
+        int color1;
+        int color2;
+        int color3;
+        int color4;
+        byte nRed, nGreen, nBlue;
+
+        byte bp1, bp2;
+
+        for (int x = 0; x < bmap.getWidth(); ++x) {
+            for (int y = 0; y < bmap.getHeight(); ++y) {
+
+                fr_x = (int) Math.floor(x * nWidthFactor);
+                fr_y = (int) Math.floor(y * nHeightFactor);
+                cx = fr_x + 1;
+                if (cx >= img.getWidth())
+                    cx = fr_x;
+                cy = fr_y + 1;
+                if (cy >= img.getHeight())
+                    cy = fr_y;
+                fx = x * nWidthFactor - fr_x;
+                fy = y * nHeightFactor - fr_y;
+                nx = 1.0 - fx;
+                ny = 1.0 - fy;
+
+                color1 = img.getPixel(fr_x, fr_y);
+                color2 = img.getPixel(cx, fr_y);
+                color3 = img.getPixel(fr_x, cy);
+                color4 = img.getPixel(cx, cy);
+
+                // Blue
+                bp1 = (byte) (nx * Color.blue(color1) + fx * Color.blue(color2));
+                bp2 = (byte) (nx * Color.blue(color3) + fx * Color.blue(color4));
+                nBlue = (byte) (ny * (double) (bp1) + fy * (double) (bp2));
+
+                // Green
+                bp1 = (byte) (nx * Color.green(color1) + fx * Color.green(color2));
+                bp2 = (byte) (nx * Color.green(color3) + fx * Color.green(color4));
+                nGreen = (byte) (ny * (double) (bp1) + fy * (double) (bp2));
+
+                // Red
+                bp1 = (byte) (nx * Color.red(color1) + fx * Color.red(color2));
+                bp2 = (byte) (nx * Color.red(color3) + fx * Color.red(color4));
+                nRed = (byte) (ny * (double) (bp1) + fy * (double) (bp2));
+
+                bmap.setPixel(x, y, Color.argb(255, nRed, nGreen, nBlue));
+            }
+        }
+
+        bmap = toGrayscale(bmap);
+        return bmap;
+    }
+    // RemoveNoise
+    private Bitmap removeNoise(Bitmap bmap) {
+        for (int x = 0; x < bmap.getWidth(); x++) {
+            for (int y = 0; y < bmap.getHeight(); y++) {
+                int pixel = bmap.getPixel(x, y);
+                if (Color.red(pixel) < 162 && Color.green(pixel) < 162 && Color.blue(pixel) < 162) {
+                    bmap.setPixel(x, y, Color.BLACK);
+                }
+            }
+        }
+        for (int x = 0; x < bmap.getWidth(); x++) {
+            for (int y = 0; y < bmap.getHeight(); y++) {
+                int pixel = bmap.getPixel(x, y);
+                if (Color.red(pixel) > 162 && Color.green(pixel) > 162 && Color.blue(pixel) > 162) {
+                    bmap.setPixel(x, y, Color.WHITE);
+                }
+            }
+        }
+        return bmap;
+    }
     // www.Gaut.am was here
     // Thanks for reading!
 

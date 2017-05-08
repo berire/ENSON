@@ -38,4 +38,10 @@
     <string name="fetch">Fetch</string>
     <string name="pause">Pause Location Updates</string>
     <string name="resume">Resume Location Updates</string>
+    <string-array name="activity_types">
+        <item>Select type</item>
+        <item>Lesson</item>
+        <item>Exam</item>
+        <item>Activity</item>
+    </string-array>
 </resources>
