@@ -7,31 +7,23 @@ import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.Mnemonica.TimeBetweenLocations.CalculateDistanceTime;
-import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Bengu on 29.4.2017.
@@ -79,38 +71,23 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
     DatabaseReference myRef;
     FirebaseDatabase database;
 
-
-
-
-    ArrayList<Act> actions1;
-    ArrayList<String> name1;
-    private FirebaseAuth mAuth1;
-    private DatabaseReference dataRef1;
-    private FirebaseDatabase myRef1;
-    private String userID1;
-    private DatabaseReference mPostReference1;
-    ArrayList<String> Actids1=new ArrayList<>();
-    ArrayList<String> lessons1=new ArrayList<>();
-    String anid1;
-    String value1;
-    int test=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.checklessonloc);
+        setContentView(R.layout.pass_less);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+       /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         MultiDex.install(this);
-
         Firebase.setAndroidContext(this);
-
+        */
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         uid = user.getUid();
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
+
         sss = new ArrayList<>();
         actList = new ArrayList<>();
         keys = new ArrayList<>();
@@ -129,8 +106,10 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
         day = intent1.getIntExtra("day",0);
         keyStr = intent1.getStringExtra("key");
         actLstSize = intent1.getIntExtra("size",0);
-        // absence = intent1.getIntExtra("absence",0);
+        absence = intent1.getIntExtra("absence",0);
         attendanceLimit = intent1.getIntExtra("attendanceLimit",0);
+
+        Toast.makeText(CheckLessonLoc.this, "Absence: "+ absence,Toast.LENGTH_LONG).show();
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         // for (int y=0; y<sss.size(); y=y+7) {
@@ -138,7 +117,7 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
         mResultReceiver = new AddressResultReceiver(null);
         Intent intent = new Intent(this, GeocodeAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
-        intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, "Bilkent Ãœniversitesi");
+        intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, "Bilkent Üniversitesi");
         intent.putExtra(Constants.FETCH_TYPE_EXTRA, fetchType);
 
         Log.e(TAG, "Starting Service");
@@ -146,94 +125,6 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
         //}
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-
-        //Previous versions of Firebase
-        Firebase.setAndroidContext(this);
-
-        actions1=new ArrayList<>();
-
-        mAuth1 = FirebaseAuth.getInstance();
-        final FirebaseUser user = mAuth1.getCurrentUser();
-        userID1 = user.getUid();
-
-        myRef1 =FirebaseDatabase.getInstance();
-        dataRef1 = myRef1.getReference("Users");
-
-        // Initialize Database
-        mPostReference1 = FirebaseDatabase.getInstance().getReference( )
-                .child("Users").child(userID1).child("Lessons");
-
-
-
-
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        ValueEventListener postListener1 = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot child : dataSnapshot.getChildren()){
-                    anid1=(String)child.getKey();
-                    Actids1.add(anid1);
-                }
-                for (int i=0;i<Actids1.size();i++)
-                {
-                    Act act=new Act();
-                    String aKey= Actids1.get(i);
-
-                    act.setAttendanceLimit(Integer.parseInt(( (String) dataSnapshot.child(aKey).child("Attendance Limit").getValue()).toString()));
-
-                    act.setAbsance(Integer.parseInt(( (String) dataSnapshot.child(aKey).child("Absence").getValue()).toString()));
-
-                    value1=(String) dataSnapshot.child(aKey).child("Activity Name").getValue();
-                    act.setActName(value1);
-                    act.setDate(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Day").getValue()).toString()));
-                    act.setMonth(Integer.parseInt(( (String) dataSnapshot.child(aKey).child("Activity Month").getValue()).toString()));
-                    act.setDestination((((String) dataSnapshot.child(aKey).child("Activity Destination").getValue()).toString()));
-                    act.setHour(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Hour").getValue()).toString()));
-                    act.setYear(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Year").getValue()).toString()));
-                    act.setMinute(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Minute").getValue()).toString()));
-                    actions1.add(act);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // [START_EXCLUDE]
-                Toast.makeText(CheckLessonLoc.this, "Failed to load activities",
-                        Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
-            }
-        };
-        mPostReference1.addValueEventListener(postListener1);
-
-        Set<Act> hs = new HashSet<>();
-        hs.addAll(actions1);
-        actions1.clear();
-        actions1.addAll(hs);
-        test=1;
-
-        for(int i=0;i<actions1.size();i++)
-        {
-            // Toast.makeText(CheckLessonLoc.this, "Bengu Lesson Name: "+actions1.get(i).getActName()+"Lesson Abscence: " + actions1.get(i).getAbsance(),Toast.LENGTH_SHORT).show();
-            if(name.toLowerCase().equals(actions1.get(i).getActName().toLowerCase())) {
-                absence =  actions1.get(i).getAbsance();
-
-                if (distance < 3) {
-                    absence++;
-                    Toast.makeText(CheckLessonLoc.this, "oyyy: "+ absence,Toast.LENGTH_LONG).show();
-                    String a = String.valueOf(absence);
-                    DatabaseReference newRef = myRef.child("Users").child(uid).child("Lessons").child(keyStr);
-                    newRef.child("Absence").setValue(a);
-
-                }
-                //absence =actions1.get(i).getAbsance();
-                Toast.makeText(CheckLessonLoc.this, "Allahin absencincii: "+ absence,Toast.LENGTH_LONG).show();
-            }
-        }
-
 
     }
 
@@ -246,9 +137,6 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-
-
-
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);
@@ -301,8 +189,35 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
                                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
                                 Toast.makeText(CheckLessonLoc.this, time_distance[1]+ " "+ timeStr,Toast.LENGTH_LONG).show();
                                 Toast.makeText(CheckLessonLoc.this, time_distance[0],Toast.LENGTH_LONG).show();
-                                Toast.makeText(CheckLessonLoc.this, "name " + name,Toast.LENGTH_LONG).show();
-                                Toast.makeText(CheckLessonLoc.this, "add"+ actions1.get(0).getActName(),Toast.LENGTH_LONG).show();
+                                if(distance>5){
+                                    absence++;
+                                    // Toast.makeText(CheckLessonLoc.this, "Ansence: "+ absence,Toast.LENGTH_LONG).show();
+                                    if(absence==attendanceLimit){
+                                        Toast.makeText(CheckLessonLoc.this, "Ansence: "+ absence+"\n"+"You Fail!",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+
+                                Toast.makeText(CheckLessonLoc.this, "Absence: "+ absence,Toast.LENGTH_LONG).show();
+                                String a = String.valueOf(absence);
+                                DatabaseReference newRef = myRef.child("Users").child(uid).child("Lessons").child(keyStr);
+                                newRef.child("Absence").setValue(a);
+
+                                //startAL();
+                             /*   Act act = new Act();
+                                act.setHour(hour);
+                                act.setActName(name);
+                                act.setDate(day);
+                                act.setMinute(minute);
+                                act.setMonth(month);
+                                act.setYear(year);
+                                act.setDestination(destination);
+                                act.setKey(keyStr);
+                                actList.add(act);
+                                lstSize++;
+                                if(lstSize==actLstSize){
+                                    strAl();
+                                }*/
                             }
                         });
 
@@ -322,31 +237,30 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
                     }
                 });
             }
-
+            startAL();
         }
     }
+    private void startAL(){
+        Intent intnt = new Intent(CheckLessonLoc.this, Menu.class);
+        startActivity(intnt);
 
-
-    public void INC(int dist)
-    {
-
-        if(dist<5 && test==1)
-        {
-            Toast.makeText(CheckLessonLoc.this, "INC absence " + absence,Toast.LENGTH_LONG).show();
-
-            absence++;
-            // Toast.makeText(CheckLessonLoc.this, "Ansence: "+ absence,Toast.LENGTH_LONG).show();
-            if(absence==attendanceLimit){
-                Toast.makeText(CheckLessonLoc.this, "Absence: "+ absence+"\n"+"You Fail!",Toast.LENGTH_LONG).show();
-            }
-        }
+      /*  Toast.makeText(MapsActivity.this, "bengu",Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, name,Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, destination,Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, String.valueOf(hour),Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, String.valueOf(minute),Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, String.valueOf(year),Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, String.valueOf(month),Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, keyStr,Toast.LENGTH_LONG).show();*/
+       /* for (int i =0; i<sss.size(); i++){
+          Toast.makeText(MapsActivity.this, sss.get(i),Toast.LENGTH_LONG).show();
+        }*/
+     /* for (int i =0; i<sss.size(); i++){
+          Toast.makeText(MapsActivity.this, actList.get(i).getActName(),Toast.LENGTH_LONG).show();
+      }*/
+        //  Intent intent3 = new Intent(MapsActivity.this, AddActToSchedule.class);
+        //  startActivity(intent3);
     }
-
-
-
-
-
-
     private void strAl() {
         Toast.makeText(CheckLessonLoc.this, "Set Up Alarm",Toast.LENGTH_LONG).show();
         Calendar cal[] = new Calendar[actList.size()];
@@ -386,5 +300,4 @@ public class CheckLessonLoc extends FragmentActivity implements OnMapReadyCallba
         actList.clear();
         lstSize = 0;
     }
-
 }

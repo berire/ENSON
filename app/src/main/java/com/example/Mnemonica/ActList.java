@@ -9,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.Mnemonica.TimeBetweenLocations.MapsActivity;
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +53,7 @@ public class ActList extends Activity {
     private String userID;
     private String activityID;
     String key;
+    String key0="";
     String key2;
     ArrayAdapter<String> arrAdap;
     boolean check =true;
@@ -61,10 +64,20 @@ public class ActList extends Activity {
     int newNum;
     ArrayList<Act> a;
     ArrayList<String> sss;
+    ArrayList<String> keys;
+    ArrayList<String> h;
+    ArrayList<String> min;
+    ArrayList<String> da;
+    ArrayList<String> m;
+    ArrayList<String> y;
+    ArrayList<String> dests;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    public String destination;
+    ArrayList<Act> actList;
+    int p=0;
 
     private ListView mListView;
     @Override
@@ -74,6 +87,12 @@ public class ActList extends Activity {
 
         mUsernames = new ArrayList<>();
         userClone = new ArrayList<>();
+        h = new ArrayList<>();
+        min = new ArrayList<>();
+        da = new ArrayList<>();
+        m = new ArrayList<>();
+        y = new ArrayList<>();
+        dests = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
@@ -83,6 +102,7 @@ public class ActList extends Activity {
         dataRef = myRef.getReference("Users");
         a =  new ArrayList<>();
         sss = new ArrayList<>();
+        actList = new ArrayList<>();
 
 
         valueList = (ListView) findViewById(R.id.actList);
@@ -92,6 +112,7 @@ public class ActList extends Activity {
         activityID = String.valueOf(num);
         key=activityID;
         key2=activityID;
+        keys = new ArrayList<>();
 
       /*  dataRef.child(userID).child("Number of Activities").addValueEventListener(new ValueEventListener() {
             @Override
@@ -111,16 +132,21 @@ public class ActList extends Activity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     for (DataSnapshot child : dataSnapshot.getChildren()){
+                        p++;
                         value = child.getValue(String.class);
                         key2 = child.getKey();
                         key = dataSnapshot.getKey();
-                        //sss.add(value);
-                        if (key2.equals("Activity Name")){
+                        sss.add(value);
+                        if (key2.equals("Activity Name")) {
                             userClone.add(key);
                             userClone.add(value);
+                            keys.add(key);
                             //mUsernames.add(key);
                             mUsernames.add(value);
                             arrAdap.notifyDataSetChanged();
+                        }
+                        else if (key2.equals("Activity Destination")){
+                            dests.add(value);
                         }
                     }
                 }
@@ -145,6 +171,23 @@ public class ActList extends Activity {
 
                 }
             });
+
+        for (int j=0; j<sss.size(); j=j+7){
+            Act act = new Act();
+            act.setHour(Integer.valueOf(sss.get(j+2)));
+            act.setActName(sss.get(j+5));
+            act.setDate(Integer.valueOf(sss.get(j)));
+            act.setMinute(Integer.valueOf(sss.get(j+3)));
+            act.setMonth(Integer.valueOf(sss.get(j+4)));
+            act.setYear(Integer.valueOf(sss.get(j+6)));
+            act.setDestination(sss.get(j+1));
+
+            act.setKey(keys.get(num));
+            actList.add(act);
+            num++;
+        }
+        // destination = "bengu";
+
           //  Collections.sort(mUsernames);
            // arrAdap.notifyDataSetChanged();
 
@@ -176,20 +219,20 @@ public class ActList extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder adb=new AlertDialog.Builder(ActList.this);
                 adb.setTitle("Delete?");
-                adb.setMessage("Are you sure you want to delete " + i);
+                adb.setMessage("Are you sure you want to delete " +"\n"+"Activity Destination: "+ dests.get(i));
                 final int positionToRemove = i;
                 adb.setNegativeButton("Cancel", null);
                 adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        int c = userClone.indexOf(mUsernames.get(positionToRemove));
-                        int d = c-1;
-                        int k = Integer.valueOf(userClone.get(d));
-                        String b = String.valueOf(k);
+                        //String elm = mUsernames.get(positionToRemove);
+                       // int c = userClone.indexOf(mUsernames.get(positionToRemove));
+                        String b = keys.get(positionToRemove);
                         dataRef.child(userID).child("activities").child(b).removeValue();
+                        dests.remove(positionToRemove);
+                        userClone.remove(positionToRemove);
+                        keys.remove(positionToRemove);
                         mUsernames.remove(positionToRemove);
                         arrAdap.notifyDataSetChanged();
-                        int n = mUsernames.size();
-                        dataRef.child(userID).child("Number of Activities").setValue(n);
                     }});
                 adb.show();
             }

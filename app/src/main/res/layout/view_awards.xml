@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/champagne"
+        android:layout_below="@+id/winner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
+
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="22dp"
+        android:layout_weight="0.07"
+        android:text="TextView"
+        android:textSize="16sp"
+        android:textColor="#d40d0d"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/maxPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/points"
+        android:layout_marginTop="32dp"
+        android:layout_weight="0.07"
+        android:text="TextView"
+        android:textSize="16sp"
+        android:textColor="#d40d0d"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/winner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="82dp"
+        android:layout_weight="0.07"
+        android:text="TextView"
+        android:textSize="16sp"
+        android:textStyle="bold|italic"
+        android:layout_below="@+id/points"
+        android:textColor="#d40d0d"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

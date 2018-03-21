@@ -1,6 +1,5 @@
 package com.example.Mnemonica;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -74,11 +73,11 @@ public class Try extends Activity {
                     Toast.makeText(Try.this,act.getActName(), Toast.LENGTH_LONG).show();
                     //act.setDate(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Day").getValue()).toString()));
 
-                    // act.setMonth(Integer.parseInt(( (String) dataSnapshot.child(aKey).child("Activity Month").getValue()).toString()));
-                    // act.setDestination((((String) dataSnapshot.child(aKey).child("Activity Destination").getValue()).toString()));
-                    //  act.setHour(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Hour").getValue()).toString()));
-                    //  act.setYear(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Year").getValue()).toString()));
-                    //   act.setMinute(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Minute").getValue()).toString()));
+                   // act.setMonth(Integer.parseInt(( (String) dataSnapshot.child(aKey).child("Activity Month").getValue()).toString()));
+                   // act.setDestination((((String) dataSnapshot.child(aKey).child("Activity Destination").getValue()).toString()));
+                  //  act.setHour(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Hour").getValue()).toString()));
+                  //  act.setYear(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Year").getValue()).toString()));
+                 //   act.setMinute(Integer.parseInt(((String) dataSnapshot.child(aKey).child("Activity Minute").getValue()).toString()));
                     actions.add(act);
                 }
             }

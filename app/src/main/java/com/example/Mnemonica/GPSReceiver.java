@@ -1,10 +1,9 @@
 package com.example.Mnemonica;
 
-
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.Mnemonica.TimeBetweenLocations.MapsActivity;
 
@@ -21,9 +20,9 @@ public class GPSReceiver extends BroadcastReceiver {
         int minute = intent.getIntExtra("minute",0);
         int month = intent.getIntExtra("month",0);
         int year = intent.getIntExtra("year",0);
-        int day = intent.getIntExtra("day", 0);
+        int day = intent.getIntExtra("day",0);
         String keyStr = intent.getStringExtra("key");
-        int actListSize = intent.getIntExtra("size",0);
+        int actLstSize = intent.getIntExtra("size", 0);
         //Toast.makeText(context,action, Toast.LENGTH_LONG).show();
 
 
@@ -36,8 +35,8 @@ public class GPSReceiver extends BroadcastReceiver {
         intent2.putExtra("month", month);
         intent2.putExtra("year", year);
         intent2.putExtra("key", keyStr);
-        intent2.putExtra("day", day);
-        intent2.putExtra("size",actListSize);
+        intent2.putExtra("day",day);
+        intent2.putExtra("size", actLstSize);
         context.startActivity(intent2);
         /*
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);

@@ -12,19 +12,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +34,7 @@ public class Pop extends Activity {
     LinearLayout containerLayout;
     String str;
     String key;
-    String len;
+    String dest;
     TextView tvMsg;
     TextView tevet;
     Ringtone ringtone;
@@ -55,13 +49,14 @@ public class Pop extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.schedule);
+        setContentView(R.layout.pop);
 
         //tevet = (TextView)findViewById(R.id.eventTitle);
         Intent intent = this.getIntent();
         str = intent.getStringExtra("str");
         key = intent.getStringExtra("key");
-        len = intent.getStringExtra("len");
+        dest = intent.getStringExtra("dest");
+       // len = intent.getStringExtra("len");
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -106,7 +101,7 @@ public class Pop extends Activity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Pop.this);
         builder.setTitle("Mnemonica");
-        builder.setMessage(str+" "+key+" "+len);
+        builder.setMessage(str+" "+dest+" ");
         builder.setNegativeButton("İPTAL", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id) {
 
@@ -121,7 +116,7 @@ public class Pop extends Activity {
             public void onClick(DialogInterface dialog, int id) {
                 //Tamam butonuna basılınca yapılacaklar
                 dataRef.child(userID).child("activities").child(key).removeValue();
-                dataRef.child(userID).child("Number of Activities").setValue(len);
+                //dataRef.child(userID).child("Number of Activities").setValue(len);
                 Intent intent = new Intent(Pop.this,Menu.class);
                 startActivity(intent);
 
@@ -140,7 +135,7 @@ public class Pop extends Activity {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.m_ic)
                         .setContentTitle("Mnemonica")
-                        .setContentText(str+" "+key);
+                        .setContentText(str+" "+dest);
 
         Intent notificationIntent = new Intent(this, Pop.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,

@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Mnemonica.iml" filepath="$PROJECT_DIR$/Mnemonica.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Mnemonica_updated_Maps_Gps-master.iml" filepath="$PROJECT_DIR$/Mnemonica_updated_Maps_Gps-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/easy_ocr_library/easy_ocr_library.iml" filepath="$PROJECT_DIR$/easy_ocr_library/easy_ocr_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/easy_ocr_library-release/easy_ocr_library-release.iml" filepath="$PROJECT_DIR$/easy_ocr_library-release/easy_ocr_library-release.iml" />
-      <module fileurl="file://$PROJECT_DIR$/new_new_new-master.iml" filepath="$PROJECT_DIR$/new_new_new-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/new_new_(demo hali).iml" filepath="$PROJECT_DIR$/new_new_(demo hali).iml" />
     </modules>
   </component>
 </project>

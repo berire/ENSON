@@ -4,10 +4,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +38,7 @@ public class AddActToSchedule extends AppCompatActivity {
     private FirebaseDatabase myRef;
     private String userID;
 
+    GPSTracker gps;
     String key="";
     String key2="";
     ArrayAdapter<String> arrAdap;
@@ -54,22 +56,45 @@ public class AddActToSchedule extends AppCompatActivity {
     ArrayList<Integer> m2;
     ArrayList<Integer> y2;
     ArrayList<String> name2;
-    public ArrayList<Act> actList;
+    ArrayList<Act> actList;
     ArrayList<Act> actList2;
     ArrayList<Act> actList3;
     ArrayList<Act> actList4;
     ArrayList<Act> actList5;
 
-
+    int minute;
+    int hour;
+    int date;
+    int month;
+    int index3;
+    int index4;
+    int index5;
+    int index6;
+    boolean check =true;
     String value;
     int num=0;
+    int no;
+    int newNum;
+    int a;
+    int b;
     Button alrmTry;
+    double latitudeFirst = 0;
+    double longitudeFirst = 0;
+    double latitudeSecond;
+    double longitudeSecond;
+    private Handler handler;
 
+
+
+    public String destination;
+
+
+    private ListView mListView;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addschedule);
-        alrmTry = (Button)findViewById(R.id.alrmTry);
+        //setContentView(R.layout.addschedule);
+        //alrmTry = (Button)findViewById(R.id.alrmTry);
 
 
 
@@ -79,8 +104,6 @@ public class AddActToSchedule extends AppCompatActivity {
 
         myRef =FirebaseDatabase.getInstance();
         dataRef = myRef.getReference("Users");
-
-
 
         h = new ArrayList<>();
         min = new ArrayList<>();
@@ -102,6 +125,17 @@ public class AddActToSchedule extends AppCompatActivity {
         actList4 = new ArrayList<>();
         actList5 = new ArrayList<>();
 
+      /*  dataRef.child(userID).child("Number of Activities").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                no = dataSnapshot.getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
 
         dataRef.child(userID).child("activities").addChildEventListener(new ChildEventListener() {
             @Override
@@ -124,6 +158,9 @@ public class AddActToSchedule extends AppCompatActivity {
                     }*/
 
                 }
+                sendGps();
+
+                // Toast.makeText(AddActToSchedule.this,"2",Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -147,16 +184,93 @@ public class AddActToSchedule extends AppCompatActivity {
             }
         });
 
-        alrmTry.setOnClickListener(new View.OnClickListener() {
+
+        //Toast.makeText(AddActToSchedule.this,"1",Toast.LENGTH_LONG).show();
+        /*alrmTry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                al();
-            }
-        });
 
+                //al();
+            }
+        });*/
+
+    }
+    private void sendGps(){
+
+        for (int j=0; j<sss.size(); j=j+7){
+            Act act = new Act();
+            act.setHour(Integer.valueOf(sss.get(j+2)));
+            act.setActName(sss.get(j+5));
+            act.setDate(Integer.valueOf(sss.get(j)));
+            act.setMinute(Integer.valueOf(sss.get(j+3)));
+            act.setMonth(Integer.valueOf(sss.get(j+4)));
+            act.setYear(Integer.valueOf(sss.get(j+6)));
+            act.setDestination(sss.get(j+1));
+
+            act.setKey(keys.get(num));
+            actList.add(act);
+            num++;
+        }
+
+        Collections.sort(actList,Act.ActMinuteComp);
+        Collections.sort(actList,Act.ActHourComp);
+        Collections.sort(actList,Act.ActDateComp);
+        Collections.sort(actList,Act.ActMonthComp);
+
+
+        //     AlarmManager[] alarmManager = new AlarmManager[actList.size()];
+  /*      ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
+        for (int i = 0; i < actList.size(); i++) {
+            Intent intent = new Intent(AddActToSchedule.this,GPSReceiver.class);
+            intent.putExtra("dest", actList.get(i).getDestination());
+            intent.putExtra("name", actList.get(i).getActName());
+            intent.putExtra("hour", actList.get(i).getHour());
+            intent.putExtra("minute", actList.get(i).getMinute());
+            intent.putExtra("month", actList.get(i).getMonth());
+            intent.putExtra("year", actList.get(i).getYear());
+            intent.putExtra("key", actList.get(i).getKey());
+
+
+            PendingIntent pi = PendingIntent.getBroadcast(
+                    AddActToSchedule.this, i, intent, 0);
+
+      //      alarmManager[i] = (AlarmManager) getSystemService(ALARM_SERVICE);
+      //      alarmManager[i].set(AlarmManager.RTC_WAKEUP, 0, pi);
+
+            intentArray.add(pi);
+
+        }*/
+
+        //destination = sss.get(1);
+        for (int i=0; i<actList.size(); i++){
+            // Toast.makeText(AddActToSchedule.this, destination,Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(AddActToSchedule.this, GPSReceiver.class);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("dest", actList.get(i).getDestination());
+            intent.putExtra("name", actList.get(i).getActName());
+            intent.putExtra("hour", actList.get(i).getHour());
+            intent.putExtra("minute", actList.get(i).getMinute());
+            intent.putExtra("month", actList.get(i).getMonth());
+            intent.putExtra("year", actList.get(i).getYear());
+            intent.putExtra("day", actList.get(i).getDate());
+            intent.putExtra("key", actList.get(i).getKey());
+            intent.putExtra("size", actList.size());
+            //intent.putExtra("actlist", actList);
+            //intent.putExtra("list", sss);
+            //startActivity(intent);
+            sendBroadcast(intent);
+        }
     }
     private void al(){
 
+        /*for (int k=0; k<sss.size(); k=k+6){
+            h.add(Integer.valueOf(sss.get(k)));
+            name.add(sss.get(k+1));
+            d.add(Integer.valueOf(sss.get(k+2)));
+            min.add(Integer.valueOf(sss.get(k+3)));
+            m.add(Integer.valueOf(sss.get(k+4)));
+            y.add(Integer.valueOf(sss.get(k+5)));
+        }*/
         for (int j=0; j<sss.size(); j=j+7){
             Act act = new Act();
             act.setHour(Integer.valueOf(sss.get(j+2)));
@@ -171,10 +285,12 @@ public class AddActToSchedule extends AppCompatActivity {
             num++;
         }
 
+
         Collections.sort(actList,Act.ActMinuteComp);
         Collections.sort(actList,Act.ActHourComp);
         Collections.sort(actList,Act.ActDateComp);
         Collections.sort(actList,Act.ActMonthComp);
+        //Calendar calendar[] = new Calendar[3];
 
         Calendar cal[] = new Calendar[actList.size()];
 
@@ -189,7 +305,6 @@ public class AddActToSchedule extends AppCompatActivity {
             cal[i].set(Calendar.MONTH, actList.get(i).getMonth());
             cal[i].set(Calendar.YEAR, actList.get(i).getYear());
         }
-
         int actNum =keys.size();
         AlarmManager[] alarmManager = new AlarmManager[actList.size()];
         ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
@@ -211,10 +326,5 @@ public class AddActToSchedule extends AppCompatActivity {
             intentArray.add(pi);
 
         }
-    }
-
-    public ArrayList<Act> getActList()
-    {
-        return actList;
     }
 }

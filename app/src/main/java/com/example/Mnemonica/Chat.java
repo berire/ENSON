@@ -138,8 +138,4 @@ public class Chat extends AppCompatActivity {
         fr=frnd;
     }
 
-
-
-
-
 }

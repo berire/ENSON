@@ -42,7 +42,15 @@
         android:label="Mnemonica"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:exported="true">
+        android:largeHeap="true"
+        android:exported="true"
+
+
+
+
+
+
+        >
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -161,7 +169,28 @@
             <action android:name="android.intent.action.BOOT_COMPLETED" />
         </intent-filter>
         </receiver>
+        <receiver android:name=".ActCurrentReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".ExamReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
+        <activity android:name=".CallLessonSch"/>
+        <activity android:name=".ActCurrent"/>
+        <activity android:name=".ActCurrentCheck"/>
+        <activity android:name=".ViewAwards"/>
+        <activity android:name=".RemindExam"/>
+        <activity android:name=".ExamCheck"/>
+        <activity android:name=".StartAlarm"/>
+        <activity android:name=".SMSActivity"/>
+        <activity android:name=".ViewActivities"/>
+        <activity android:name=".LessonList"/>
+        <activity android:name=".ExamList"/>
         <activity android:name=".Pop"/>
         <activity android:name=".Alarm"/>
         <activity android:name=".Data"/>

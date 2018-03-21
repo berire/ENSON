@@ -136,7 +136,7 @@ public class Schedule extends AppCompatActivity implements OnDateSelectedListene
             String out="";
             if(inx.size()>=1) {
                 for(int g=0;g<inx.size();g++)
-                    out=out +"EVENT NAME: " + actions.get(inx.get(g)).getActName() + "EVENT PLACE: " + actions.get(inx.get(g)).getDestination() + "EVENT HOUR: " + actions.get(inx.get(g)).getHour();
+                    out=out +" EVENT NAME: " + actions.get(inx.get(g)).getActName() + " EVENT PLACE: " + actions.get(inx.get(g)).getDestination() + " EVENT HOUR: " + actions.get(inx.get(g)).getHour();
 
                 textView.setText(out);
             }

@@ -105,7 +105,7 @@ public class LectureApprove extends AppCompatActivity {
 
         for (int i = 0; i < rb_numb; i++)
         {
-            String ap=" Name: " + lectures.get(i).getcontext()+" Hour: "+ lectures.get(i).gethour()+"40"+ " Day: "+lectures.get(i).getDay();
+            String ap=" Name: " + lectures.get(i).getcontext()+" Hour: "+ lectures.get(i).gethour()+"40"+ " Day: "+lectures.get(i).getRD();
             TableRow row =new TableRow(this);
             row.setId(i);
             row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -150,9 +150,10 @@ public class LectureApprove extends AppCompatActivity {
                     String lesName="";
                     int hour1=0;
                     int minute1=0;
-                    String day1="";
-                    String monthStr1="";
-                    String yearStr1="";
+                    int day1=0;
+                    int monthStr1=0;
+                    int yearStr1=0;
+                    String RD="";
                     String destination1="";
                     if(verfy.get(i)==true)
                     {
@@ -160,16 +161,16 @@ public class LectureApprove extends AppCompatActivity {
                         hour1=lectures.get(i).gethour();
                         minute1=40;
                         day1=lectures.get(i).getDay();
-                        monthStr1="EVERY";
-                        yearStr1="EVERY";
+                        monthStr1=4;
+                        yearStr1=2017;
                         destination1="Bilkent Universitesi";
 
                         String actN = lesName;
                         int hour = hour1;
                         int minute = minute1;
-                        String dayStr = day1;
-                        String monthStr = monthStr1;
-                        String yearStr = yearStr1;
+                        String dayStr = String.valueOf(day1);
+                        String monthStr =String.valueOf( monthStr1);
+                        String yearStr = String.valueOf(yearStr1);
                         String destination =destination1;
 
 
@@ -189,6 +190,7 @@ public class LectureApprove extends AppCompatActivity {
                         newRef.child("Activity Month").setValue(monthStr);
                         newRef.child("Activity Year").setValue(yearStr);
                         newRef.child("Activity Destination").setValue(destination);
+                        newRef.child("Absence").setValue("0");
                         numberOfActivity++;
                         //numOfAct = String.valueOf(numberOfActivity);
                         myRef.child("Users").child(uid).child("Number of Activities").setValue(numberOfActivity);

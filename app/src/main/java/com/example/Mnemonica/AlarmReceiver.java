@@ -7,9 +7,6 @@ package com.example.Mnemonica;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.widget.Toast;
 
 
@@ -19,7 +16,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra("str");
         String key = intent.getStringExtra("key");
-        String len = intent.getStringExtra("len");
+        String dest = intent.getStringExtra("dest");
+        //String len = intent.getStringExtra("len");
         Toast.makeText(context,action, Toast.LENGTH_LONG).show();
 
 
@@ -27,7 +25,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent2.putExtra("str",action);
         intent2.putExtra("key",key);
-        intent2.putExtra("len",len);
+        intent2.putExtra("dest",dest);
+        Toast.makeText(context,"Alarm receiverdan geldim, "+dest, Toast.LENGTH_LONG).show();
+        // intent2.putExtra("len",len);
         context.startActivity(intent2);
         /*
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);

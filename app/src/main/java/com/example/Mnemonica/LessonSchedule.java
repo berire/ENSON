@@ -5,11 +5,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Timer;
 
 /**
  * Created by Bengu on 29.4.2017.
@@ -73,15 +70,15 @@ public class LessonSchedule extends AppCompatActivity {
     Button alrmTry;
 
     public String destination;
-    Timer t = new Timer();
 
 
     private ListView mListView;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lesson_schedule);
-        alrmTry = (Button)findViewById(R.id.lessonTry);
+        //setContentView(R.layout.lesson_schedule);
+        //alrmTry = (Button)findViewById(R.id.lessonTry);
+
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -111,6 +108,7 @@ public class LessonSchedule extends AppCompatActivity {
         actList4 = new ArrayList<>();
         actList5 = new ArrayList<>();
 
+
         dataRef.child(userID).child("Lessons").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -123,6 +121,7 @@ public class LessonSchedule extends AppCompatActivity {
                     }
                     sss.add(value);
                 }
+                al();
             }
 
             @Override
@@ -148,16 +147,14 @@ public class LessonSchedule extends AppCompatActivity {
 
         // al();
 
-        alrmTry.setOnClickListener(new View.OnClickListener() {
+      /*  alrmTry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // sendGps();
-                al();
+
             }
-        });
+        });*/
     }
-
-
 
     private void al(){
         for (int j=0; j<sss.size(); j=j+9){
@@ -187,11 +184,13 @@ public class LessonSchedule extends AppCompatActivity {
 
 
         for (int i = 0; i < actList.size(); i++) {
+
             cal[i] = Calendar.getInstance();
-            cal[i].setTimeInMillis(System.currentTimeMillis());
             cal[i].set(Calendar.HOUR_OF_DAY, actList.get(i).getHour());
             cal[i].set(Calendar.MINUTE, actList.get(i).getMinute());
             cal[i].set(Calendar.SECOND, 0);
+            cal[i].set(Calendar.DAY_OF_MONTH, actList.get(i).getDate());
+            cal[i].set(Calendar.MONTH, actList.get(i).getMonth());
             cal[i].set(Calendar.YEAR, actList.get(i).getYear());
         }
         int actNum =keys.size();
@@ -218,9 +217,11 @@ public class LessonSchedule extends AppCompatActivity {
 
             alarmManager[f] = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarmManager[f].set(AlarmManager.RTC_WAKEUP,cal[f].getTimeInMillis(), pi);
-            alarmManager[f].setRepeating(AlarmManager.RTC_WAKEUP, cal[f].getTimeInMillis(),60 * 1000 , pi);
+            //alarmManager[f].setRepeating(AlarmManager.RTC_WAKEUP, cal[f].getTimeInMillis(),60 * 1000 , pi);
             intentArray.add(pi);
         }
+        Intent intnt = new Intent(LessonSchedule.this,Menu.class);
+        startActivity(intnt);
     }
 
     private void sendGps(){
@@ -247,7 +248,8 @@ public class LessonSchedule extends AppCompatActivity {
 
 
         for (int i=0; i<actList.size(); i++){
-            Intent intent = new Intent(LessonSchedule.this, LessonReceiver.class);
+            Intent intent = new Intent(LessonSchedule.this,
+                    LessonReceiver.class);
             //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("dest", actList.get(i).getDestination());
             intent.putExtra("name", actList.get(i).getActName());
@@ -262,9 +264,4 @@ public class LessonSchedule extends AppCompatActivity {
             sendBroadcast(intent);
         }
     }
-
-    public void tryMethod(){
-        Toast.makeText(getBaseContext(), "hello", Toast.LENGTH_LONG);
-    }
-
 }

@@ -521,7 +521,8 @@ public class SimpleAndroidOCRActivity extends Activity {
 
             if(distX==0*w)
             {
-                lectures.get(x).setDay("Monday");
+                lectures.get(x).setDay(8);///"Monday"
+                lectures.get(x).setRD("Monday");
                 if(distY==0)
                 {
                     lectures.get(x).sethour(8);
@@ -566,7 +567,8 @@ public class SimpleAndroidOCRActivity extends Activity {
 
             if(distX>0*w && distX<=1*w)
             {
-                lectures.get(x).setDay("Monday");
+                lectures.get(x).setDay(8);
+                lectures.get(x).setRD("Monday");
                 if(distY==0)
                 {
                     lectures.get(x).sethour(8);
@@ -611,7 +613,8 @@ public class SimpleAndroidOCRActivity extends Activity {
 
             if(distX>1*w && distX<=2*w)
             {
-                lectures.get(x).setDay("Tuesday");
+                lectures.get(x).setDay(9);
+                lectures.get(x).setRD("Tuesday");
                 if(distY==0)
                 {
                     lectures.get(x).sethour(8);
@@ -656,7 +659,8 @@ public class SimpleAndroidOCRActivity extends Activity {
 
             if(distX>2*w && distX<=3*w)
             {
-                lectures.get(x).setDay("Wednesday");
+                lectures.get(x).setDay(10);
+                lectures.get(x).setRD("Wednesday");
                 if(distY==0)
                 {
                     lectures.get(x).sethour(8);
@@ -700,7 +704,8 @@ public class SimpleAndroidOCRActivity extends Activity {
             }
             if(distX>3*w && distX<=4*w)
             {
-                lectures.get(x).setDay("Thursday");
+                lectures.get(x).setDay(11);
+                lectures.get(x).setRD("Thursday");
                 if(distY==0)
                 {
                     lectures.get(x).sethour(8);
@@ -744,7 +749,8 @@ public class SimpleAndroidOCRActivity extends Activity {
             }
             if(distX>4*w)
             {
-                lectures.get(x).setDay("Friday");
+                lectures.get(x).setDay(12);
+                lectures.get(x).setRD("Friday");
                 if(distY==0)
                 {
                     lectures.get(x).sethour(8);

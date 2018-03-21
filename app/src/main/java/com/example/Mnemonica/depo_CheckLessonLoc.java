@@ -155,7 +155,7 @@ public class depo_CheckLessonLoc extends FragmentActivity implements OnMapReadyC
         ////////////////////////////////////////////////////////////////////////////////////////////
         // for (int y=0; y<sss.size(); y=y+7) {
         fetchType = Constants.USE_ADDRESS_NAME;
-        //!!!!!!!!!aÃ§ burayi!!!!!!!  mResultReceiver = new AddressResultReceiver(null);
+        //!!!!!!!!!aç burayi!!!!!!!  mResultReceiver = new AddressResultReceiver(null);
         Intent intent = new Intent(this, GeocodeAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
         intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, "Armada");

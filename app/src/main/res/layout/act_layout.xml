@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#a7a4a4">
 
     <EditText
         android:id="@+id/actName"
@@ -50,25 +51,16 @@
         android:layout_alignParentEnd="true"
         android:layout_width="240dp" />
 
-    <Button
-        android:id="@+id/attandanceCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="attandance check"
-        android:layout_below="@+id/eventTime"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/eventTime"
-        android:layout_toStartOf="@+id/eventTime" />
-
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         app:srcCompat="?android:attr/homeAsUpIndicator"
         android:id="@+id/backArrow"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_width="50dp"
+        android:background="#ea5137"/>
+
 
     <Button
         android:id="@+id/preExamWarning"
@@ -76,10 +68,11 @@
         android:layout_height="wrap_content"
         android:text="add exam warning "
         android:layout_below="@+id/eventTime"
-        android:layout_toRightOf="@+id/attandanceCheck"
-        android:layout_toEndOf="@+id/attandanceCheck"
-        android:layout_marginLeft="27dp"
-        android:layout_marginStart="27dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#ea5137"/>
 
     <Spinner
         android:layout_height="wrap_content"
@@ -101,8 +94,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/eventTime"
-        android:layout_toLeftOf="@+id/eventTime" />
-
+        android:background="#ea5137"/>
     <Button
         android:id="@+id/addActivity"
         android:layout_width="wrap_content"
@@ -113,8 +105,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="14dp"
         android:layout_toLeftOf="@+id/eventTime"
-        android:layout_toStartOf="@+id/eventTime" />
-
+        android:layout_toStartOf="@+id/eventTime"
+        android:background="#ea5137"/>
     <Button
         android:id="@+id/strtAlarm"
         android:layout_width="wrap_content"
@@ -124,7 +116,19 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/eventDate"
-        android:layout_toStartOf="@+id/eventDate" />
-
+        android:layout_toStartOf="@+id/eventDate"
+        android:background="#ea5137"/>
+    <Button
+        android:id="@+id/attandanceCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="attandance check"
+        android:layout_above="@+id/strtAlarm"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="13dp"
+        android:layout_toLeftOf="@+id/eventDate"
+        android:layout_toStartOf="@+id/eventDate"
+        android:background="#ea5137"/>
 
 </RelativeLayout>

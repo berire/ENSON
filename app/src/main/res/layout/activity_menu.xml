@@ -1,72 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/menu_back"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/editAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit Your Account" />
+        android:background="@drawable/home"
+        android:text="Edit Your Account"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/addAct"
+        android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/addAct"
+        android:background="@drawable/cinema"
+        android:layout_width="94dp"
+        android:text="Add Activity"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="69dp"
+        android:layout_marginStart="69dp"
+        android:layout_below="@+id/textInputLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="94dp" />
+
+    <Button
+        android:id="@+id/addFriend"
+        android:background="@drawable/hotel"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:text="Add Friend"
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/editAccount"
+        android:layout_alignLeft="@+id/addAct"
+        android:layout_alignStart="@+id/addAct"
+        android:layout_marginLeft="37dp"
+        android:layout_marginStart="37dp" />
+
+    <Button
+        android:id="@+id/viewAw"
+        android:text="award"
+        android:background="@drawable/castle"
+        android:layout_width="106dp"
+        android:layout_alignBottom="@+id/addFriend"
+        android:layout_toRightOf="@+id/editAccount"
+        android:layout_toEndOf="@+id/editAccount"
+        android:layout_height="106dp" />
+
+    <Button
+        android:id="@+id/schedule"
+        android:text="schedule"
+        android:background="@drawable/school"
+        android:layout_alignBottom="@+id/addAct"
+        android:layout_toRightOf="@+id/addFriend"
+        android:layout_toEndOf="@+id/addFriend"
+        android:layout_marginLeft="23dp"
+        android:layout_marginStart="23dp"
+        android:layout_width="106dp"
+        android:layout_height="106dp" />
+
+    <Button
+        android:id="@+id/showActivity"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_below="@+id/addFriend"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/addAct"
+        android:layout_toRightOf="@+id/addAct"
+        android:background="@drawable/policestation"
+        android:text="SHOW" />
     <Button
         android:id="@+id/dataTest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test Data" />
+        android:text="Test Data"
+        android:layout_below="@+id/editAccount"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <Button
-        android:id="@+id/addAct"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Activity" />
 
-    <Button
-        android:text="show my location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/location" />
 
-    <Button
-        android:text="Find Distance Time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/findDistTime" />
-
-    <Button
-        android:text="push notification "
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:id="@+id/pushNotification" />
-
-    <Button
-        android:text="show token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_show_token" />
-    <Button
-        android:id="@+id/addFriend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Friend" />
-
-    <Button
-        android:id="@+id/showFriends"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Show Friends" />
-
-    <Button
-        android:id="@+id/findAdressLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="show location of anywhere" />
-
-    <Button
-        android:id="@+id/schedule_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Schedule" />
-
-</LinearLayout>
+</RelativeLayout>

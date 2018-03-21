@@ -1,6 +1,8 @@
 package com.example.Mnemonica;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,17 +58,35 @@ public class SendEvent extends Activity {
     String value;
     ArrayList<String> fList;
     String eventN;
+    String destination;
+    int hour;
+    String keyStr;
+    int minute;
+    int year;
+    int month;
+    int day;
+    Button hande;
+
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.send_event);
-        Intent intent = this.getIntent();
-        eventN = intent.getStringExtra("name");
+
+        Intent intent1 = this.getIntent();
+        destination = intent1.getStringExtra("dest");
+        eventN = intent1.getStringExtra("name");
+        hour = intent1.getIntExtra("hour",0);
+        minute = intent1.getIntExtra("minute",0);
+        month = intent1.getIntExtra("month",0);
+        year = intent1.getIntExtra("year",0);
+        day = intent1.getIntExtra("day",0);
 
         OneSignal.startInit(this).init();
         send = (Button) findViewById(R.id.send);
+        hande = (Button) findViewById((R.id.hande));
+        hande.setVisibility(View.GONE);
         // Call syncHashedEmail anywhere in your app if you have the user's email.
         // This improves the effectiveness of OneSignal's "best-time" notification scheduling feature.
         // OneSignal.syncHashedEmail(userEmail);
@@ -102,22 +122,13 @@ public class SendEvent extends Activity {
         send.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-
                 for (int i = 0; i<fList.size(); i++){
-                 Send_Request.Request_Type=2;
-                 Send_Request.toWhom=fList.get(i);
-                    Send_Request.Event_id=eventN;
-                    Intent intent = new Intent(SendEvent.this, Send_Request.class);
-                    startActivity(intent);
-                    //sendNotification(fList.get(i));
+                    sendNotification(fList.get(i));
                 }
 
             }
         });
     }
-
-
     private void sendNotification(final String mail)
     {
         AsyncTask.execute(new Runnable() {
@@ -128,17 +139,17 @@ public class SendEvent extends Activity {
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                             .permitAll().build();
                     StrictMode.setThreadPolicy(policy);
-                    String send_email="bengu.akbostanci06@gmail.com";
+                    String send_email=mail;
 
                     //This is a Simple Logic to Send Notification different Device Programmatically....
-                    if (SendEvent.LoggedIn_User_Email.equals("bengu.akbostanci06@gmail.com")) {
-                            send_email = mail;
+              /*      if (SendEvent.LoggedIn_User_Email.equals("bengu.akbostanci06@gmail.com")) {
+                        send_email = mail;
 
-                       // send_email = "handeozyazgan@gmail.com";
+                        // send_email = "handeozyazgan@gmail.com";
                     } else {
                         send_email = "bengu.akbostanci06@gmail.com";
                     }
-
+*/
                     try {
                         String jsonResponse;
 
@@ -172,12 +183,12 @@ public class SendEvent extends Activity {
 
                         int httpResponse = con.getResponseCode();
                         System.out.println("httpResponse: " + httpResponse);
-                       // httpResponse >= HttpURLConnection.HTTP_OK
-                          //      && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST)
+                        // httpResponse >= HttpURLConnection.HTTP_OK
+                        //      && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST)
 
                         if (httpResponse >= HttpURLConnection.HTTP_OK
                                 && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
-                            dataRef.child(userID).child("activities").child("Event").setValue(eventN);
+                            hande.setVisibility(View.VISIBLE);
                             Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
                             jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                             scanner.close();

@@ -25,7 +25,7 @@ public class EventPop extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EventPop.this);
         builder.setTitle("Mnemonica");
         builder.setMessage(eventN + " join");
-        builder.setNegativeButton("Ä°PTAL", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("IPTAL", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id) {
 
                 //Ä°ptal butonuna basÄ±lÄ±nca yapÄ±lacaklar.Sadece kapanmasÄ± isteniyorsa boÅŸ bÄ±rakÄ±lacak

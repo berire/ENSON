@@ -3,8 +3,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+
+<ListView
+        android:background="#d4cbda"
         android:id="@+id/actList"
+        android:textSize="16sp"
+        android:textColor="#060606"
+        android:textStyle="bold|italic"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

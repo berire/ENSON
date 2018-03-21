@@ -124,11 +124,5 @@ public class AddFriend extends Activity {
                 adb.show();
             }
         });
-
-        /*
-        * friendNum++;
-          String fNum = String.valueOf(friendNum);
-              dataRef.child(userID).child("Friends").child(fNum).setValue(friendsList.get(positionToRemove));
-        */
     }
 }

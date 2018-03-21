@@ -16,11 +16,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.onesignal.OneSignal;
 
 import java.io.OutputStream;
@@ -28,7 +25,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
-import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 /**
  * Created by Bengu on 18.4.2017.
  */
@@ -87,6 +83,7 @@ public class CreateEvent extends Activity {
             @Override
             public void onClick(View v) {
                 eName = eventName.getText().toString();
+                place = eventPlace.getText().toString();
                 hourStr = String.valueOf(eventTİme.getCurrentHour());
                 minuteStr = String.valueOf(eventTİme.getCurrentMinute());
                 dayStr = String.valueOf(eventDate.getDayOfMonth());
@@ -101,13 +98,14 @@ public class CreateEvent extends Activity {
                 num++;
                 activityID = String.valueOf(num);
                 //myRef.child("Users").child(uid).child("activities").child(activityID).child("Activity Name").setValue(eventName);
-                DatabaseReference newRef =  myRef.child("Users").child(uid).child("activities").child(activityID);
+                DatabaseReference newRef =  myRef.child("Users").child(uid).child("activities").push();
                 newRef.child("Activity Name").setValue(eName);
                 newRef.child("Activity Hour").setValue(hourStr);
                 newRef.child("Avtivity Minute").setValue(minuteStr);
                 newRef.child("Avtivity Day").setValue(dayStr);
                 newRef.child("Avtivity Month").setValue(monthStr);
                 newRef.child("Avtivity Year").setValue(yearStr);
+                newRef.child("Activity Destination").setValue(place);
                 numberOfActivity++;
                 //numOfAct = String.valueOf(numberOfActivity);
                 myRef.child("Users").child(uid).child("Number of Activities").setValue(numberOfActivity);
@@ -120,7 +118,14 @@ public class CreateEvent extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateEvent.this, SendEvent.class);
-                intent.putExtra("name",eName);
+                intent.putExtra("dest", place);
+                intent.putExtra("name", eName);
+                intent.putExtra("hour", hourStr);
+                intent.putExtra("minute", minuteStr);
+                intent.putExtra("month", monthStr);
+                intent.putExtra("year", yearStr);
+                intent.putExtra("day", dayStr);
+                // intent.putExtra("key", actList.get(i).getKey());
                 startActivity(intent);
                 //sendNotification();
             }
